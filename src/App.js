@@ -101,16 +101,22 @@ class App extends Component {
 
   render() {
     const { searchTerm, searchResults } = this.state;
+    const resultsStyle = {
+      display: 'flex',
+      flexWrap: 'wrap',
+    }
     const results = searchResults ? 
     Object.keys(searchResults).map((key) => {
       return (
         <div>
           <h2>{key.toUpperCase()}S</h2>
-          <SearchResults
-            kindResults={searchResults[key]}
-            addFavorite={this.addFavorite}
-            kind={key}
-          />
+          <div style={resultsStyle}>
+            <SearchResults
+              kindResults={searchResults[key]}
+              addFavorite={this.addFavorite}
+              kind={key}
+            />
+          </div>
         </div>
       )
     })
@@ -123,6 +129,7 @@ class App extends Component {
           handleInputChange={this.handleInputChange}
           handleSearchSubmit={this.handleSearchSubmit}
         />
+        <span>My Favorites</span>
       {results}
       </div>
     );

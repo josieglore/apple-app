@@ -17,7 +17,7 @@ function addFavorite(req, res, next) {
     artwork,
     genre,
     url,
-  } = req.params;
+  } = req.body;
   const values = [kind, id, name, artwork, genre, url];
   const addFavoriteStr = 'INSERT INTO apple_favorites(kind, id, name, artwork, genre, url) VALUES ($1, $2, $3, $4, $5, $6);';
   pgClient.query(addFavoriteStr, values, (err, result) => {
