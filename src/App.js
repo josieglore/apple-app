@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import SearchBar from '../components/SearchBar';
+import SearchBar from './components/SearchBar';
+import SearchResults from './components/SearchResults';
 
 const CLOUDINARY_UPLOAD_PRESET = process.env.CLOUDINARY_UPLOAD_PRESET;
 
@@ -52,10 +53,10 @@ class App extends Component {
     searchCopy = searchCopy.replace(/\s+/g, '+');
     axios.post(`https://itunes.apple.com/search?term=${searchCopy}`)
     .then((response) => {
-      response.results.forEach((result) => {
+      response.data.results.forEach((result) => {
         const resultObj = {id: result.trackId, name: result.trackName, artwork: result.artworkUrl30, genre: result.primaryGenreName, url: result.trackViewUrl };
         if (!searchObj[result.kind]) {
-          result.kind = [resultObj];
+          searchObj[result.kind] = [resultObj];
         }
         else searchObj[result.kind].push(resultObj);
       })
@@ -67,6 +68,7 @@ class App extends Component {
     })
   }
   render() {
+    const { searchTerm, searchResults } = this.state;
     return (
       <div>
         <div><h1>Movies That Are Cool</h1></div>
@@ -74,6 +76,9 @@ class App extends Component {
           searchTerm={searchTerm}
           handleInputChange={this.handleInputChange}
           handleSearchSubmit={this.handleSearchSubmit}
+        />
+        <SearchResults 
+          searchResults={searchResults}
         />
       </div>
     );
