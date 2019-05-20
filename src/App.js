@@ -1,26 +1,83 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react';
+import axios from 'axios';
+import SearchBar from '../components/SearchBar';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const CLOUDINARY_UPLOAD_PRESET = process.env.CLOUDINARY_UPLOAD_PRESET;
+
+
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      favorites: [],
+      searchResults: {},
+      searchTerm: '',
+    };
+    this.getFavorites = this.getFavorites.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleSearchSubmit = this.handleSearchSubmit.bind(this);
+  }
+
+  componentDidMount() {
+    this.getFavorites();
+  }
+
+ // retrieve movie factoids from database and populate movies array in state
+  getFavorites() {
+    axios.get('http://localhost:3000/')
+      .then((response) => {
+        const favesArr = [];
+        response.data.favorites.forEach((favorite) => {
+          favesArr.push(favorite);
+        });
+        this.setState({
+          favorites: favesArr,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  handleInputChange(e) {
+    this.setState({
+      searchTerm: e.target.value,
+    });
+  }
+
+  handleSearchSubmit() {
+    const { searchTerm } = this.state;
+    const searchObj = {};
+    let searchCopy = searchTerm;
+    searchCopy = searchCopy.replace(/\s+/g, '+');
+    axios.post(`https://itunes.apple.com/search?term=${searchCopy}`)
+    .then((response) => {
+      response.results.forEach((result) => {
+        const resultObj = {id: result.trackId, name: result.trackName, artwork: result.artworkUrl30, genre: result.primaryGenreName, url: result.trackViewUrl };
+        if (!searchObj[result.kind]) {
+          result.kind = [resultObj];
+        }
+        else searchObj[result.kind].push(resultObj);
+      })
+    })
+    .then(() => {
+      this.setState({
+        searchResults: searchObj,
+      })
+    })
+  }
+  render() {
+    return (
+      <div>
+        <div><h1>Movies That Are Cool</h1></div>
+        <SearchBar
+          searchTerm={searchTerm}
+          handleInputChange={this.handleInputChange}
+          handleSearchSubmit={this.handleSearchSubmit}
+        />
+      </div>
+    );
+  }
 }
 
 export default App;
