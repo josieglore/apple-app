@@ -72,9 +72,12 @@ class App extends Component {
     const results = searchResults ? 
     Object.keys(searchResults).map((key) => {
       return (
-        <SearchResults
-          kindResults={searchResults[key]}
-        />
+        <div>
+          <h2>{key.toUpperCase()}S</h2>
+          <SearchResults
+            kindResults={searchResults[key]}
+          />
+        </div>
       )
     })
     : null;

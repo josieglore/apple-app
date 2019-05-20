@@ -6,8 +6,11 @@ const SearchResults = (props) => {
     kindResults.map((result) => {
       return (
         <div>
-          <h3>Name</h3>
-          <p>{result.name}</p>
+          <h3>{result.name}</h3>
+          <img src={result.artwork}/>
+          <p>{result.id}</p>
+          <p>{result.genre}</p>
+          <p>{result.url}</p>
         </div>
       )
     })
