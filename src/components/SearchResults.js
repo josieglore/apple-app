@@ -11,7 +11,7 @@ const SearchResults = (props) => {
           <p>{result.id}</p>
           <p>{result.genre}</p>
           <p>{result.url}</p>
-          <button onClick={() => addFavorite(result)}>Add to Favorites</button>
+          <button onClick={() => addFavorite(result, kind)}>Add to Favorites</button>
         </div>
       )
     })

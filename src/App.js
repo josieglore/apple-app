@@ -4,6 +4,7 @@ import SearchBar from './components/SearchBar';
 import SearchResults from './components/SearchResults';
 
 const CLOUDINARY_UPLOAD_PRESET = process.env.CLOUDINARY_UPLOAD_PRESET;
+const CLOUDINARY_API_KEY = process.env.CLOUDINARY_API_KEY;
 
 
 class App extends Component {
@@ -26,7 +27,7 @@ class App extends Component {
 
  // retrieve movie factoids from database and populate movies array in state
   getFavorites() {
-    axios.get('http://localhost:3000/')
+    axios.get('/')
       .then((response) => {
         const favesArr = [];
         response.data.favorites.forEach((favorite) => {
@@ -69,8 +70,33 @@ class App extends Component {
     })
   }
 
-  addFavorite(result) {
+  addFavorite(result, key) {
+    const { id, name, artwork, genre, url } = result;
     console.log(result)
+    const { favorites } = this.state;
+    const favesCopy = favorites.slice();
+    axios.post('/addFavorite', {
+      kind: key,
+      id,
+      name,
+      artwork,
+      genre,
+      url,
+    })
+    .then(() => {
+      const newFave = {
+        kind: key,
+        id,
+        name,
+        artwork,
+        genre,
+        url
+      }
+      favesCopy.push(newFave)
+      this.setState({
+        favorites: favesCopy,
+      })
+    });
   }
 
   render() {
