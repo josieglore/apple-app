@@ -9,12 +9,12 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-// app.use(express.static(__dirname + '/../../dist'));
-
+// retrieve entries from apple_favorites database
 app.get('/getFavorites', favoritesController.getFavorites, (req, res) => {
   return res.status(200).json({ favorites: res.locals.favorites });
 });
 
+// insert entry into apple_favorites database
 app.post('/addFavorite', favoritesController.addFavorite, (req, res) => {
   return res.status(200).json({ 'new favorite added': res.locals.newFavorite })
 });

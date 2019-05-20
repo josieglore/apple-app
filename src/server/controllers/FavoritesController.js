@@ -1,5 +1,6 @@
 const pgClient = require('../models/database');
 
+// retrieve entries from apple_favorites database
 function getFavorites(req, res, next) {
   const getFavoritesStr = 'SELECT kind, id, name, artwork, genre, url FROM apple_favorites';
   pgClient.query(getFavoritesStr, (err, result) => {
@@ -9,6 +10,7 @@ function getFavorites(req, res, next) {
   });
 }
 
+// insert entry into apple_favorites database
 function addFavorite(req, res, next) {
   const {
     kind,

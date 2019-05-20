@@ -12,6 +12,7 @@ const Favorites = (props) => {
     backgroundColor: '#e0e6e8',
   }
   return (
+    // create box for each entry in the favorites array
     favorites.map((result, index) => {
       return (
         <div id={`favorite-${index}`} style={resultBox}>

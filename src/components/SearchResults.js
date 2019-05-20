@@ -12,6 +12,7 @@ const SearchResults = (props) => {
     backgroundColor: '#e0e6e8',
   }
   return (
+    // create result box for each object in the media kind array
     kindResults.map((result, index) => {
       return (
         <div id={`${kind}-${index}`} style={resultBox}>

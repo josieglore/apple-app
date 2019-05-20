@@ -4,9 +4,6 @@ import SearchBar from './components/SearchBar';
 import SearchResults from './components/SearchResults';
 import Favorites from './components/Favorites';
 
-const CLOUDINARY_UPLOAD_PRESET = process.env.CLOUDINARY_UPLOAD_PRESET;
-const CLOUDINARY_API_KEY = process.env.CLOUDINARY_API_KEY;
-
 
 class App extends Component {
   constructor(props) {
@@ -24,6 +21,9 @@ class App extends Component {
     this.handleBackClick = this.handleBackClick.bind(this);
   }
 
+  // retrieve list of saved favorites from database
+  // create new array of favorites, push all reusults from database into array
+  // update favorites array in state with favesArr
   getFavorites() {
     axios.get('/getFavorites')
       .then((response) => {
@@ -41,18 +41,27 @@ class App extends Component {
       });
   }
 
+  // go back to search page
+  // note: would normally do react router, 
+  // but did conditional rendering for sake of time
   handleBackClick() {
     this.setState({
       favoritesClicked: false,
     })
   }
 
+  // track change in search box value on typing event
   handleInputChange(e) {
     this.setState({
       searchTerm: e.target.value,
     });
   }
 
+  // create empty search object --> each key on search object will be a different kind of media, with value being an array of results for that kind
+  // query iTunes API with search term from input field
+  // create a results object for each search result
+  // if the media kind for the result already exists in search object, push result onto array associated with that key
+  // update searchResults property in state with searchObj
   handleSearchSubmit() {
     const { searchTerm } = this.state;
     const searchObj = {};
@@ -75,9 +84,13 @@ class App extends Component {
     })
   }
 
+  // result parameter is whatever result gets returned from API call (for each result)
+  // key parameter is the media kind key from searchResults
+  // insert all result values and the key value into favorites database
+  // create new object out of result + key values and push onto copy of favorites array from state (this will ensure state gets updated if there is a lag in updating the database)
+  // NOTE: would normally use something like Cloudinary for picture uploads, but did not here for the sake of time
   addFavorite(result, key) {
     const { id, name, artwork, genre, url } = result;
-    console.log(result)
     const { favorites } = this.state;
     const favesCopy = favorites.slice();
     axios.post('/addFavorite', {
@@ -111,6 +124,7 @@ class App extends Component {
       display: 'flex',
       flexWrap: 'wrap',
     }
+    // create a header for each key (media kind) in searchResults object
     const results = searchResults && !favoritesClicked ? 
     Object.keys(searchResults).map((key) => {
       return (
