@@ -17,7 +17,7 @@ class App extends Component {
     this.getFavorites = this.getFavorites.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSearchSubmit = this.handleSearchSubmit.bind(this);
-    // this.addFavorite = this.addFavorite.bind(this);
+    this.addFavorite = this.addFavorite.bind(this);
   }
 
   componentDidMount() {
@@ -69,9 +69,9 @@ class App extends Component {
     })
   }
 
-  // addFavorite() {
-  //   const 
-  // }
+  addFavorite(result) {
+    console.log(result)
+  }
 
   render() {
     const { searchTerm, searchResults } = this.state;
