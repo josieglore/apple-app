@@ -69,17 +69,24 @@ class App extends Component {
   }
   render() {
     const { searchTerm, searchResults } = this.state;
+    const results = searchResults ? 
+    Object.keys(searchResults).map((key) => {
+      return (
+        <SearchResults
+          kindResults={searchResults[key]}
+        />
+      )
+    })
+    : null;
     return (
       <div>
-        <div><h1>Movies That Are Cool</h1></div>
+        <h1>Search Apple</h1>
         <SearchBar
           searchTerm={searchTerm}
           handleInputChange={this.handleInputChange}
           handleSearchSubmit={this.handleSearchSubmit}
         />
-        <SearchResults 
-          searchResults={searchResults}
-        />
+      {results}
       </div>
     );
   }

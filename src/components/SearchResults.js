@@ -1,13 +1,17 @@
 import React from 'react';
 
-const SearchBar = (props) => {
-  const { handleInputChange, handleSearchSubmit } = props;
+const SearchResults = (props) => {
+  const { kindResults } = props;
   return (
-    <div>
-      <input type='text' onChange={handleInputChange}></input>
-      <button onClick={handleSearchSubmit}>Search</button>
-    </div>
+    kindResults.map((result) => {
+      return (
+        <div>
+          <h3>Name</h3>
+          <p>{result.name}</p>
+        </div>
+      )
+    })
   )
 }
 
-export default SearchBar;
+export default SearchResults;
