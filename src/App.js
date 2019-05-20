@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import SearchBar from './components/SearchBar';
 import SearchResults from './components/SearchResults';
+import Favorites from './components/Favorites';
 
 const CLOUDINARY_UPLOAD_PRESET = process.env.CLOUDINARY_UPLOAD_PRESET;
 const CLOUDINARY_API_KEY = process.env.CLOUDINARY_API_KEY;
@@ -14,6 +15,7 @@ class App extends Component {
       favorites: [],
       searchResults: {},
       searchTerm: '',
+      favoritesClicked: false,
     };
     this.getFavorites = this.getFavorites.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -21,13 +23,12 @@ class App extends Component {
     this.addFavorite = this.addFavorite.bind(this);
   }
 
-  componentDidMount() {
-    this.getFavorites();
-  }
+  // componentDidMount() {
+  //   this.getFavorites();
+  // }
 
- // retrieve movie factoids from database and populate movies array in state
   getFavorites() {
-    axios.get('/')
+    axios.get('/getFavorites')
       .then((response) => {
         const favesArr = [];
         response.data.favorites.forEach((favorite) => {
@@ -35,6 +36,7 @@ class App extends Component {
         });
         this.setState({
           favorites: favesArr,
+          favoritesClicked: true,
         });
       })
       .catch((err) => {
@@ -100,7 +102,7 @@ class App extends Component {
   }
 
   render() {
-    const { searchTerm, searchResults } = this.state;
+    const { searchTerm, searchResults, favoritesClicked } = this.state;
     const resultsStyle = {
       display: 'flex',
       flexWrap: 'wrap',
@@ -121,16 +123,23 @@ class App extends Component {
       )
     })
     : null;
+    const searchBar = !favoritesClicked ? 
+      <SearchBar
+      searchTerm={searchTerm}
+      handleInputChange={this.handleInputChange}
+      handleSearchSubmit={this.handleSearchSubmit}
+    />
+    : null;
+    const favorites = favoritesClicked ? 
+      <Favorites/>
+    : null;
+
     return (
       <div>
-        <h1>Search Apple</h1>
-        <SearchBar
-          searchTerm={searchTerm}
-          handleInputChange={this.handleInputChange}
-          handleSearchSubmit={this.handleSearchSubmit}
-        />
-        <span>My Favorites</span>
+      {searchBar}
       {results}
+      {favorites}
+      <button onClick={() => this.getFavorites()}>Click to View Favorites</button>
       </div>
     );
   }
