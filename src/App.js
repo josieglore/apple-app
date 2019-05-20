@@ -21,6 +21,7 @@ class App extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSearchSubmit = this.handleSearchSubmit.bind(this);
     this.addFavorite = this.addFavorite.bind(this);
+    this.handleBackClick = this.handleBackClick.bind(this);
   }
 
   // componentDidMount() {
@@ -42,6 +43,12 @@ class App extends Component {
       .catch((err) => {
         console.log(err);
       });
+  }
+
+  handleBackClick() {
+    this.setState({
+      favoritesClicked: false,
+    })
   }
 
   handleInputChange(e) {
@@ -102,12 +109,12 @@ class App extends Component {
   }
 
   render() {
-    const { searchTerm, searchResults, favoritesClicked } = this.state;
+    const { searchTerm, searchResults, favoritesClicked, favorites } = this.state;
     const resultsStyle = {
       display: 'flex',
       flexWrap: 'wrap',
     }
-    const results = searchResults ? 
+    const results = searchResults && !favoritesClicked ? 
     Object.keys(searchResults).map((key) => {
       return (
         <div>
@@ -128,18 +135,23 @@ class App extends Component {
       searchTerm={searchTerm}
       handleInputChange={this.handleInputChange}
       handleSearchSubmit={this.handleSearchSubmit}
+      getFavorites={this.getFavorites}
     />
     : null;
-    const favorites = favoritesClicked ? 
-      <Favorites/>
+    const favoritesList = favoritesClicked ? 
+      <Favorites
+        favorites={favorites}
+      />
     : null;
-
+    const backButton = favoritesClicked ? 
+      <button onClick={() => this.handleBackClick()}>Back to search</button>
+    : null;
     return (
       <div>
       {searchBar}
       {results}
-      {favorites}
-      <button onClick={() => this.getFavorites()}>Click to View Favorites</button>
+      {favoritesList}
+      {backButton}
       </div>
     );
   }
