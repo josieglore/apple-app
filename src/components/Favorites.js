@@ -14,12 +14,13 @@ const Favorites = (props) => {
   return (
     // create box for each entry in the favorites array
     favorites.map((result, index) => {
+      const kindStr = `${result.kind.charAt(0).toUpperCase()}${result.kind.slice(1)}`;
       return (
         <div id={`favorite-${index}`} style={resultBox}>
           <h3>{result.name}</h3>
           <img src={result.artwork}/>
           <p>{result.id}</p>
-          <p>{result.kind}</p>
+          <p>{kindStr}</p>
           <p>{result.genre}</p>
           <a href={result.url}>Find on iTunes</a>
         </div>
