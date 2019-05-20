@@ -17,6 +17,7 @@ class App extends Component {
     this.getFavorites = this.getFavorites.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSearchSubmit = this.handleSearchSubmit.bind(this);
+    // this.addFavorite = this.addFavorite.bind(this);
   }
 
   componentDidMount() {
@@ -67,6 +68,11 @@ class App extends Component {
       })
     })
   }
+
+  // addFavorite() {
+  //   const 
+  // }
+
   render() {
     const { searchTerm, searchResults } = this.state;
     const results = searchResults ? 
@@ -76,6 +82,8 @@ class App extends Component {
           <h2>{key.toUpperCase()}S</h2>
           <SearchResults
             kindResults={searchResults[key]}
+            addFavorite={this.addFavorite}
+            kind={key}
           />
         </div>
       )
