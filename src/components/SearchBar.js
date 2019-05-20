@@ -7,6 +7,7 @@ const SearchBar = (props) => {
       <h1>Search Apple</h1>
       <input type='text' onChange={handleInputChange}></input>
       <button onClick={handleSearchSubmit}>Search</button>
+      <br />
       <button onClick={getFavorites}>Click to View Favorites</button>
     </div>
   )

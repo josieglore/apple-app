@@ -24,10 +24,6 @@ class App extends Component {
     this.handleBackClick = this.handleBackClick.bind(this);
   }
 
-  // componentDidMount() {
-  //   this.getFavorites();
-  // }
-
   getFavorites() {
     axios.get('/getFavorites')
       .then((response) => {
@@ -106,6 +102,7 @@ class App extends Component {
         favorites: favesCopy,
       })
     });
+    alert('Added to favorites');
   }
 
   render() {
@@ -118,7 +115,7 @@ class App extends Component {
     Object.keys(searchResults).map((key) => {
       return (
         <div>
-          <h2>{key.toUpperCase()}S</h2>
+          <h2>{key.toUpperCase().replace(new RegExp('-','g'),' ')}S</h2>
           <div style={resultsStyle}>
             <SearchResults
               kindResults={searchResults[key]}
@@ -150,8 +147,10 @@ class App extends Component {
       <div>
       {searchBar}
       {results}
-      {favoritesList}
       {backButton}
+      <br />
+      <br />
+      {favoritesList}
       </div>
     );
   }
